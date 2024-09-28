@@ -1,24 +1,14 @@
-import 'dart:convert';
+import 'package:pdax_work_trial/features/person_list/data/models/models.dart';
+import 'package:pdax_work_trial/features/person_list/domain/entity/entity.dart';
 
-import 'package:equatable/equatable.dart';
-
-import 'person_list_datum.dart';
-
-class PersonListModel extends Equatable {
-  final String? status;
-  final int? code;
-  final String? locale;
-  final dynamic seed;
-  final int? total;
-  final List<PersonListDatum>? data;
-
+class PersonListModel extends PersonListEntity {
   const PersonListModel({
-    this.status,
-    this.code,
-    this.locale,
-    this.seed,
-    this.total,
-    this.data,
+    super.status,
+    super.code,
+    super.locale,
+    super.seed,
+    super.total,
+    super.data,
   });
 
   factory PersonListModel.fromMap(Map<String, dynamic> data) {
@@ -33,49 +23,4 @@ class PersonListModel extends Equatable {
           .toList(),
     );
   }
-
-  Map<String, dynamic> toMap() => {
-        'status': status,
-        'code': code,
-        'locale': locale,
-        'seed': seed,
-        'total': total,
-        'data': data?.map((e) => e.toMap()).toList(),
-      };
-
-  /// `dart:convert`
-  ///
-  /// Parses the string and returns the resulting Json object as [PersonListModel].
-  factory PersonListModel.fromJson(String data) {
-    return PersonListModel.fromMap(json.decode(data) as Map<String, dynamic>);
-  }
-
-  /// `dart:convert`
-  ///
-  /// Converts [PersonListModel] to a JSON string.
-  String toJson() => json.encode(toMap());
-
-  PersonListModel copyWith({
-    String? status,
-    int? code,
-    String? locale,
-    dynamic seed,
-    int? total,
-    List<PersonListDatum>? data,
-  }) {
-    return PersonListModel(
-      status: status ?? this.status,
-      code: code ?? this.code,
-      locale: locale ?? this.locale,
-      seed: seed ?? this.seed,
-      total: total ?? this.total,
-      data: data ?? this.data,
-    );
-  }
-
-  @override
-  bool get stringify => true;
-
-  @override
-  List<Object?> get props => [status, code, locale, seed, total, data];
 }
