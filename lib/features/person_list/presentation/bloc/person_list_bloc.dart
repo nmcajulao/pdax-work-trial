@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pdax_work_trial/core/resources/resources.dart';
 import 'package:pdax_work_trial/features/person_list/domain/entity/entity.dart';
@@ -124,8 +123,6 @@ class PersonListBloc extends Bloc<PersonListEvent, PersonListState> {
     PersonListRefreshed event,
     Emitter<PersonListState> emit,
   ) async {
-    debugPrint('HEEEEERERE');
-
     emit(state.copyWith(status: PersonListStatus.loading));
 
     final dataState = await _getPersonListUseCase();
