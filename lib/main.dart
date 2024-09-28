@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
+import 'core/dependency_injections/dependency_injections.dart';
+
 void main() {
+  ServiceLocator.setupServiceLocator();
   runApp(const MyApp());
 }
 
