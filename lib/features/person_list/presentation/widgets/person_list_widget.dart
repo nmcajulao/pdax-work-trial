@@ -2,36 +2,32 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pdax_work_trial/common/styles/styles.dart';
 import 'package:pdax_work_trial/common/widgets/widgets.dart';
-import 'package:pdax_work_trial/features/person_list/domain/entity/entity.dart';
 import 'package:pdax_work_trial/features/person_list/presentation/bloc/bloc.dart';
 
 class PersonListWidget extends StatelessWidget {
   const PersonListWidget({
-    required this.persons,
     super.key,
   });
 
-  final List<PersonListDatumEntity> persons;
-
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return const Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const SizedBox(
+        SizedBox(
           height: 10,
         ),
 
         // * header text
-        const _BuildHeaderText(),
+        _BuildHeaderText(),
 
-        const SizedBox(
+        SizedBox(
           height: 10,
         ),
 
         // * horizontal card country list with details
         Expanded(
-          child: _BuildListWidget(persons: persons),
+          child: _BuildListWidget(),
         ),
       ],
     );
@@ -55,11 +51,7 @@ class _BuildHeaderText extends StatelessWidget {
 }
 
 class _BuildListWidget extends StatefulWidget {
-  const _BuildListWidget({
-    required this.persons,
-  });
-
-  final List<PersonListDatumEntity> persons;
+  const _BuildListWidget();
 
   @override
   State<_BuildListWidget> createState() => _BuildListWidgetState();
@@ -72,6 +64,10 @@ class _BuildListWidgetState extends State<_BuildListWidget> {
 
   void _loadMoreItems() {
     context.read<PersonListBloc>().add(PersonListMorePeopleLoaded());
+  }
+
+  void _onRefresh() {
+    context.read<PersonListBloc>().add(PersonListRefreshed());
   }
 
   void _setIsLoadingMoreStatus(bool newStatus) {
@@ -101,7 +97,7 @@ class _BuildListWidgetState extends State<_BuildListWidget> {
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
-      onRefresh: () async {},
+      onRefresh: () async => _onRefresh(),
       child: BlocConsumer<PersonListBloc, PersonListState>(
         listener: (context, state) {
           if (state.status.isLoadingMore) {
@@ -111,26 +107,31 @@ class _BuildListWidgetState extends State<_BuildListWidget> {
           }
         },
         builder: (context, state) {
-          return ListView(
-            controller: _scrollController,
-            shrinkWrap: true,
-            padding: const EdgeInsets.only(
-              bottom: 10,
-            ),
-            children: [
-              for (final person in widget.persons) ...[
-                Card(
-                  elevation: 4,
-                  shadowColor: const Color.fromARGB(253, 241, 241, 241),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  margin: const EdgeInsets.all(10),
-                  child: Padding(
-                    padding: const EdgeInsets.all(15),
-                    child: Row(
-                      children: [
-                        /* CachedNetworkImage(
+          if (state.status.isLoading) {
+            return const LoaderWidget();
+          } else if (state.status.isLoaded ||
+              state.status.isLoadingMore ||
+              state.status.isInitial) {
+            return ListView(
+              controller: _scrollController,
+              shrinkWrap: true,
+              padding: const EdgeInsets.symmetric(
+                vertical: 10,
+              ),
+              children: [
+                for (final person in state.persons) ...[
+                  Card(
+                    elevation: 4,
+                    shadowColor: const Color.fromARGB(253, 241, 241, 241),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    margin: const EdgeInsets.all(10),
+                    child: Padding(
+                      padding: const EdgeInsets.all(15),
+                      child: Row(
+                        children: [
+                          /* CachedNetworkImage(
                           imageUrl: person.image ?? '',
                           imageBuilder: (context, imageProvider) => Container(
                             width: 80,
@@ -147,49 +148,52 @@ class _BuildListWidgetState extends State<_BuildListWidget> {
                           errorWidget: (context, url, error) =>
                               const Icon(EvaIcons.imageOutline),
                         ), */
-                        const SizedBox(
-                          width: 20,
-                        ),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                person.name,
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              Text(
-                                person.email ?? '',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: Colors.grey[600],
-                                ),
-                              ),
-                            ],
+                          const SizedBox(
+                            width: 20,
                           ),
-                        ),
-                      ],
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  person.name,
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Text(
+                                  person.email ?? '',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.grey[600],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(
-                  width: 20,
-                ),
+                  const SizedBox(
+                    width: 20,
+                  ),
+                ],
+                if (state.status.isLoadingMore) ...[
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  const LoaderWidget(),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                ],
               ],
-              if (state.status.isLoadingMore) ...[
-                const SizedBox(
-                  height: 10,
-                ),
-                const LoaderWidget(),
-                const SizedBox(
-                  height: 20,
-                ),
-              ],
-            ],
-          );
+            );
+          } else {
+            return const FailureWidget();
+          }
         },
       ),
     );

@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pdax_work_trial/core/resources/resources.dart';
 import 'package:pdax_work_trial/features/person_list/domain/entity/entity.dart';
@@ -123,7 +124,9 @@ class PersonListBloc extends Bloc<PersonListEvent, PersonListState> {
     PersonListRefreshed event,
     Emitter<PersonListState> emit,
   ) async {
-    emit(const PersonListState(status: PersonListStatus.loading));
+    debugPrint('HEEEEERERE');
+
+    emit(state.copyWith(status: PersonListStatus.loading));
 
     final dataState = await _getPersonListUseCase();
 
@@ -133,27 +136,28 @@ class PersonListBloc extends Bloc<PersonListEvent, PersonListState> {
         final persons = (data.data ?? []).sublist(0, 10);
 
         emit(
-          PersonListState(
+          state.copyWith(
             status: PersonListStatus.loaded,
             persons: persons,
+            page: 1,
           ),
         );
       } else {
         emit(
-          const PersonListState(
+          state.copyWith(
             status: PersonListStatus.error,
           ),
         );
       }
     } else if (dataState is DataFailed) {
       emit(
-        const PersonListState(
+        state.copyWith(
           status: PersonListStatus.error,
         ),
       );
     } else {
       emit(
-        const PersonListState(
+        state.copyWith(
           status: PersonListStatus.error,
         ),
       );
