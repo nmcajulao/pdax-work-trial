@@ -29,19 +29,25 @@ samples, guidance on mobile development, and a full API reference.
 
 1. Checkout from `main` to get the latest codebase
 2. Create feature branch ie. `feature/name-of-feature`
-3. Ready to merge your changes? Create a Merge Request to `main` branch
+3. Run `dart format .`
+4. Run `flutter analyze` (fix issues if there's any)
+5. Ready to merge your changes? Create a Merge Request to `main` branch
 
 #### Enhancement / Update
 
 1. Checkout from `main` to get the latest codebase
 2. Create feature branch ie. `enhancement/name-of-feature`
-3. Ready to merge your changes? Create a Merge Request to `main` branch
+3. Run `dart format .`
+4. Run `flutter analyze` (fix issues if there's any)
+5. Ready to merge your changes? Create a Merge Request to `main` branch
 
 #### Bugfix / Hotfix
 
 1. Checkout from `main` to get the latest codebase
 2. Create `bugfix` branch ie. `bugfix/name-of-feature`
-3. Ready to merge your changes? Create a Merge Request to `main` branch
+3. Run `dart format .`
+4. Run `flutter analyze` (fix issues if there's any)
+5. Ready to merge your changes? Create a Merge Request to `main` branch
 
 ### Commit Message
 
