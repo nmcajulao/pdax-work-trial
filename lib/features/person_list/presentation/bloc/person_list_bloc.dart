@@ -74,6 +74,13 @@ class PersonListBloc extends Bloc<PersonListEvent, PersonListState> {
     PersonListMorePeopleLoaded event,
     Emitter<PersonListState> emit,
   ) async {
+    if (state.page == 4) {
+      emit(state.copyWith(status: PersonListStatus.noMoreData));
+      await Future<void>.delayed(const Duration(seconds: 2));
+      emit(state.copyWith(status: PersonListStatus.loaded));
+      return;
+    }
+
     emit(state.copyWith(status: PersonListStatus.moreLoading));
 
     final dataState = await _getPersonListUseCase();
