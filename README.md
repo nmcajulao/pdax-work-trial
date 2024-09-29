@@ -14,13 +14,11 @@ For help getting started with Flutter development, view the
 samples, guidance on mobile development, and a full API reference.
 
 ### Starting Development (Web)
-- Run `cd web && yarn install && yarn build` to initialize web files
 - Run `flutter run` to run development in web (by default chrome, if no running emulators)
 - [Optional] Run `flutter run -d chrome` to make sure the app runs on a web platform.
 
 ### Starting Development (Mobile)
-- For iOS check [Initialize iOS Platform](#initialize-ios-platform)
-- Open emulator or connect physical device
+- Open emulator or connect physical device (Android only)
 - Run `flutter run` to run development in mobile
 
 ### Git Workflow
