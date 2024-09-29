@@ -40,12 +40,14 @@ enum PersonListStatus {
   initial,
   loading,
   moreLoading,
+  noMoreData,
   loaded,
   error;
 
   bool get isInitial => this == PersonListStatus.initial;
   bool get isLoading => this == PersonListStatus.loading;
   bool get isLoadingMore => this == PersonListStatus.moreLoading;
+  bool get isNoMoreData => this == PersonListStatus.noMoreData;
   bool get isLoaded => this == PersonListStatus.loaded;
   bool get isError => this == PersonListStatus.error;
 }

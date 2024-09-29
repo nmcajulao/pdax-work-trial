@@ -39,6 +39,10 @@ class PersonListAddressEntity extends Equatable {
       json.decode(data) as Map<String, dynamic>,
     );
   }
+
+  String get address => '$street, $streetName, $buildingNumber, $city, '
+      '$zipcode, $country $countryCode';
+
   final int? id;
   final String? street;
   final String? streetName;
